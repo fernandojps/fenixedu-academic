@@ -33,6 +33,7 @@ import org.fenixedu.academic.domain.student.Registration;
 import org.fenixedu.academic.domain.student.RegistrationStateLog;
 import org.fenixedu.academic.domain.student.registrationStates.RegistrationState;
 import org.fenixedu.academic.domain.student.registrationStates.RegistrationStateType;
+import org.fenixedu.academic.domain.student.registrationStates.RegistrationStateTypeNew;
 import org.fenixedu.academic.dto.VariantBean;
 import org.fenixedu.academic.dto.student.RegistrationStateBean;
 import org.fenixedu.academic.predicate.AccessControl;
@@ -80,7 +81,7 @@ public class ManageRegistrationStateDA extends FenixDispatchAction {
             super(registration);
         }
 
-        private RegistrationStateCreator(Registration reg, Person responsible, DateTime creation, RegistrationStateType stateType) {
+        private RegistrationStateCreator(Registration reg, Person responsible, DateTime creation, RegistrationStateTypeNew stateType) {
             this(reg);
             setResponsible(responsible);
             setStateDateTime(creation);

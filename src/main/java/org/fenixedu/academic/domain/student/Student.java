@@ -59,6 +59,7 @@ import org.fenixedu.academic.domain.phd.PhdIndividualProgramProcessState;
 import org.fenixedu.academic.domain.serviceRequests.AcademicServiceRequest;
 import org.fenixedu.academic.domain.student.registrationStates.RegistrationState;
 import org.fenixedu.academic.domain.student.registrationStates.RegistrationStateType;
+import org.fenixedu.academic.domain.student.registrationStates.RegistrationStateTypeNew;
 import org.fenixedu.academic.domain.studentCurriculum.CycleCurriculumGroup;
 import org.fenixedu.academic.domain.studentCurriculum.ExternalEnrolment;
 import org.fenixedu.academic.dto.student.StudentStatuteBean;
@@ -252,13 +253,8 @@ public class Student extends Student_Base {
         return false;
     }
 
-    public boolean hasAnyRegistrationInState(final RegistrationStateType stateType) {
-        for (final Registration registration : getRegistrationsSet()) {
-            if (registration.getActiveStateType() == stateType) {
-                return true;
-            }
-        }
-        return false;
+    public boolean hasAnyRegistrationInState(final RegistrationStateTypeNew stateType) {
+        return getRegistrationsSet().stream().anyMatch(r -> r.getActiveStateType().equals(stateType));
     }
 
     public boolean hasSpecialSeasonEnrolments(ExecutionYear executionYear) {
@@ -668,7 +664,7 @@ public class Student extends Student_Base {
     public boolean isCurrentlyEnroled(DegreeCurricularPlan degreeCurricularPlan) {
         for (Registration registration : getRegistrationsSet()) {
             final RegistrationState registrationState = registration.getActiveState();
-            if (!registration.isActive() && registrationState.getStateType() != RegistrationStateType.TRANSITED) {
+            if (!registration.isActive()) {
                 continue;
             }
 
@@ -897,8 +893,8 @@ public class Student extends Student_Base {
         for (final Registration registration : super.getRegistrationsSet()) {
             final RegistrationState registrationState = registration.getActiveState();
             if (registrationState != null) {
-                final RegistrationStateType registrationStateType = registrationState.getStateType();
-                if (registrationStateType != RegistrationStateType.TRANSITION && registrationStateType.isActive()) {
+                final RegistrationStateTypeNew registrationStateType = registrationState.getStateType();
+                if (registrationStateType.isActive()) {
                     return true;
                 }
             }
@@ -1207,10 +1203,8 @@ public class Student extends Student_Base {
 
     public boolean shouldHaveStudentRole() {
         for (final Registration registration : getRegistrationsSet()) {
-            final RegistrationStateType stateType = registration.getLastStateType();
-            if (stateType != null
-                    && ((stateType.isActive() && stateType != RegistrationStateType.SCHOOLPARTCONCLUDED)
-                            || stateType == RegistrationStateType.FLUNKED || stateType == RegistrationStateType.INTERRUPTED || stateType == RegistrationStateType.MOBILITY)) {
+            final RegistrationStateTypeNew stateType = registration.getLastStateType();
+            if (stateType != null && stateType.isStudent()) {
                 return true;
             }
         }
