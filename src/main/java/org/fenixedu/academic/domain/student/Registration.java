@@ -1827,7 +1827,7 @@ public class Registration extends Registration_Base {
 
     final public boolean isActive() {
         //TODO ACDM-1113 Remove Hack
-        if (getActiveStateType() == null) return true;
+//        if (getActiveStateType() == null) return true;
         return getActiveStateType().isActive();
     }
 
@@ -1926,7 +1926,7 @@ public class Registration extends Registration_Base {
 
     final public boolean isTransition() {
         RegistrationStateTypeNew transitionState = RegistrationStateSystem.getInstance().getTransitionState();
-        if (transitionState == null) return false;
+//        if (transitionState == null) return false;
         return getActiveStateType().equals(transitionState);
     }
 
